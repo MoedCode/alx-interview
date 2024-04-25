@@ -3,15 +3,7 @@
 
 
 def minOperations(n):
-    """
-    minOperations function that calculates the min
-    number of operations needed to reach n numbere
-    of chars
-    Args:
-        n: number of characters, int
-    Return:
-        result: number of operations needed, int
-    """
+    """minOperations function that calculates the min number of operations"""
     if n <= 1:
         return 0
 
