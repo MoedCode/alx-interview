@@ -58,6 +58,8 @@ def minOperations(n):
         return counter
     else:
         return 0
+
+
 # Test cases
 if __name__ == "__main__":
     n = 4
