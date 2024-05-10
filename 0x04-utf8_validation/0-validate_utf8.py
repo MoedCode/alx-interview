@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 UTF-8 Validation
 """
@@ -6,13 +6,9 @@ UTF-8 Validation
 
 def validUTF8(data):
     """
-    Description: Checks if the given list of integers represents a valid UTF-8 encoding.
-
-    Parameters:
-    - data: list of integers
-
-    Returns:
-    - True if the data is a valid UTF-8 encoding, otherwise False
+    Data: a list of integers
+    Return: True if data is a valid UTF-8
+    encoding, else return False
     """
     byte_count = 0
 
@@ -31,15 +27,3 @@ def validUTF8(data):
                 return False
             byte_count -= 1
     return byte_count == 0
-
-
-if __name__ == "__main__":
-    data = [65]
-    print(validUTF8(data))
-
-    data = [80, 121, 116, 104, 111, 110, 32,
-            105, 115, 32, 99, 111, 111, 108, 33]
-    print(validUTF8(data))
-
-    data = [229, 65, 127, 256]
-    print(validUTF8(data))
