@@ -1,11 +1,14 @@
 #!/usr/bin/node
-
 const request = require('request');
-request(`https://swapi-api.alx-tools.com/api/films/${process.argv[2]}/`, (error, _, body) => {
-  if (error) {
-    console.error('Error:', error);
-  } else {
-    const charactersName = JSON.parse(body).characters.map(
+const API_URL = 'https://swapi-api.hbtn.io/api';
+
+if (process.argv.length > 2) {
+  request(`${API_URL}/films/${process.argv[2]}/`, (err, _, body) => {
+    if (err) {
+      console.log(err);
+    }
+    const charactersURL = JSON.parse(body).characters;
+    const charactersName = charactersURL.map(
       url => new Promise((resolve, reject) => {
         request(url, (promiseErr, __, charactersReqBody) => {
           if (promiseErr) {
@@ -14,8 +17,9 @@ request(`https://swapi-api.alx-tools.com/api/films/${process.argv[2]}/`, (error,
           resolve(JSON.parse(charactersReqBody).name);
         });
       }));
+
     Promise.all(charactersName)
-      .then(charactersNames => console.log(charactersNames.join('\n')))
-      .catch(errors => console.log(errors));
-  }
-});
+      .then(names => console.log(names.join('\n')))
+      .catch(allErr => console.log(allErr));
+  });
+}
