@@ -1,34 +1,74 @@
 #!/usr/bin/env python3
-"""
-This module calculates the perimeter of an island described in a grid.
-"""
+
+'''0x09. Island Perimeter'''
 
 
 def island_perimeter(grid):
-    """
-    Calculates the perimeter of an island represented by a grid.
+    '''returns the perimeter of the island described in grid'''
+    counter = 0
+    grid_max = len(grid) - 1  # index of the last list in the grid
+    lst_max = len(grid[0]) - 1  # index of the last square in list
 
-    Args:
-        grid (List[List[int]]): A 2D grid representing the island,
-        where 1 represents land and 0 represents water.
+    for lst_idx, lst in enumerate(grid):
+        for land_idx, land in enumerate(lst):
+            if land == 1:
+                # left and right
+                if land_idx == 0:
+                    # left side
+                    counter += 1
 
-    Returns:
-        int: The perimeter of the island.
+                    # right side
+                    if lst[land_idx + 1] == 0:
+                        counter += 1
+                elif land_idx == lst_max:
+                    # left side
+                    if lst[land_idx - 1] == 0:
+                        counter += 1
 
-    """
-    perimeter = 0
-    rows = len(grid)
-    cols = len(grid[0])
+                    # right side
+                    counter += 1
+                else:
+                    # left side
+                    if lst[land_idx - 1] == 0:
+                        counter += 1
 
-    for i in range(rows):
-        for j in range(cols):
-            if grid[i][j] == 1:
-                perimeter += 4
+                    # right side
+                    if lst[land_idx + 1] == 0:
+                        counter += 1
 
-                if i > 0 and grid[i - 1][j] == 1:
-                    perimeter -= 2
+                # top and down
+                if lst_idx == 0:
+                    # top side
+                    counter += 1
 
-                if j > 0 and grid[i][j - 1] == 1:
-                    perimeter -= 2
+                    # bottom side
+                    if grid[lst_idx + 1][land_idx] == 0:
+                        counter += 1
+                elif lst_idx == grid_max:
+                    # top side
+                    if grid[lst_idx - 1][land_idx] == 0:
+                        counter += 1
 
-    return perimeter
+                    # bottom side
+                    counter += 1
+                else:
+                    # top side
+                    if grid[lst_idx - 1][land_idx] == 0:
+                        counter += 1
+
+                    # bottom side
+                    if grid[lst_idx + 1][land_idx] == 0:
+                        counter += 1
+
+    return counter
+
+
+if __name__ == "__main__":
+    grid = [
+        [0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0]
+    ]
+    print(island_perimeter(grid))
