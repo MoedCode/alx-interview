@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-from sys import argv
-
 
 def is_prime(n: int) -> bool:
     if n < 2:
@@ -11,44 +9,46 @@ def is_prime(n: int) -> bool:
     return True
 
 
-def pick_a_prime(num_list):
-    for i in num_list:
-        if is_prime(i):
-            num_list.remove(i)
-            num_list[:] = [num for num in num_list if num %
-                           i != 0]  # Remove multiples of the prime
-            return i
-    return False
+def sieve_of_eratosthenes(max_n):
+    """Generate a list of prime numbers up to max_n using the Sieve of Eratosthenes."""
+    is_prime = [True] * (max_n + 1)
+    is_prime[0] = is_prime[1] = False
+    p = 2
+    while (p * p <= max_n):
+        if is_prime[p]:
+            for i in range(p * p, max_n + 1, p):
+                is_prime[i] = False
+        p += 1
+    return is_prime
 
 
-def simulate_round(n):
-    Maria = True
-    Ben = True
-    turn = 0  # 0 for Maria, 1 for Ben
-    pick_list = list(range(1, n + 1))
-
-    while True:
-        if turn == 0:
-            if not pick_a_prime(pick_list):
-                return "Ben"  # Maria cannot make a move
-        else:
-            if not pick_a_prime(pick_list):
-                return "Maria"  # Ben cannot make a move
-        turn = 1 - turn  # Switch turns
+def simulate_game(n, is_prime):
+    """Simulate the game for a single round with given n."""
+    primes = [i for i in range(2, n + 1) if is_prime[i]]
+    moves = 0
+    while primes:
+        prime = primes[0]
+        moves += 1
+        primes = [p for p in primes if p % prime != 0]
+    return moves
 
 
 def isWinner(x, nums):
+    """Determine the winner of the prime game."""
     if not nums or x <= 0:
         return None
+
+    max_n = max(nums)
+    is_prime = sieve_of_eratosthenes(max_n)
 
     maria_wins = 0
     ben_wins = 0
 
     for n in nums:
-        winner = simulate_round(n)
-        if winner == "Maria":
+        moves = simulate_game(n, is_prime)
+        if moves % 2 == 1:
             maria_wins += 1
-        elif winner == "Ben":
+        else:
             ben_wins += 1
 
     if maria_wins > ben_wins:
@@ -62,7 +62,3 @@ def isWinner(x, nums):
 if __name__ == "__main__":
     # Example usage
     print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
-
-    # Uncomment for command line argument testing
-    # if len(argv) > 1:
-    #     print(is_prime(int(argv[1])))
